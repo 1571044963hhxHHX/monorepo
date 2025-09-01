@@ -1,0 +1,6 @@
+dist/
+dist-demo/
+node_modules/
+*.min.js
+*.bundle.js
+*.d.ts
