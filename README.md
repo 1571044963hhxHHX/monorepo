@@ -362,6 +362,144 @@ turbo build --profile=build-profile.json
 - 环境变量
 - 任务配置
 
+## 🧹 代码质量工具
+
+### ESLint 配置
+
+ESLint 是一个代码质量检查工具，用于检查代码中的潜在问题和错误。
+
+#### 配置文件：`.eslintrc.cjs`
+```javascript
+module.exports = {
+  root: true,
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
+  },
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 2021,
+    sourceType: 'module',
+    ecmaFeatures: { jsx: true },
+    project: ['./apps/**/tsconfig.json', './packages/**/tsconfig.json'],
+    tsconfigRootDir: __dirname,
+  },
+  settings: {
+    react: { version: 'detect' },
+    'import/resolver': {
+      typescript: {
+        project: ['./apps/**/tsconfig.json', './packages/**/tsconfig.json'],
+      },
+    },
+  },
+  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'import', 'prettier'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
+    'plugin:prettier/recommended',
+  ],
+  rules: {
+    'prettier/prettier': ['error'],
+    'react/react-in-jsx-scope': 'off',
+    'import/order': [
+      'warn',
+      {
+        groups: [['builtin', 'external'], 'internal', ['parent', 'sibling', 'index']],
+        'newlines-between': 'always',
+        alphabetize: { order: 'asc', caseInsensitive: true },
+      },
+    ],
+  },
+  ignorePatterns: [
+    '**/dist/**',
+    '**/dist-demo/**',
+    '**/node_modules/**',
+    '**/*.config.js',
+    '**/*.config.cjs',
+  ],
+};
+```
+
+#### 主要特性：
+- **TypeScript 支持**：使用 `@typescript-eslint/parser` 解析 TypeScript 代码
+- **React 规则**：包含 React 和 React Hooks 的最佳实践规则
+- **导入排序**：自动整理 import 语句的顺序和分组
+- **Prettier 集成**：与 Prettier 配合，避免格式冲突
+
+#### 忽略文件：`.eslintignore`
+```
+dist/
+dist-demo/
+node_modules/
+*.d.ts
+*.js
+```
+
+### Prettier 配置
+
+Prettier 是一个代码格式化工具，用于统一代码风格。
+
+#### 配置文件：`.prettierrc`
+```json
+{
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "arrowParens": "always",
+  "endOfLine": "lf"
+}
+```
+
+#### 配置说明：
+- **`semi: true`** - 语句末尾添加分号
+- **`singleQuote: true`** - 使用单引号
+- **`trailingComma: "all"`** - 多行时末尾添加逗号
+- **`printWidth: 100`** - 每行最大字符数
+- **`tabWidth: 2`** - 缩进使用 2 个空格
+- **`arrowParens: "always"`** - 箭头函数参数总是使用括号
+- **`endOfLine: "lf"`** - 使用 LF 换行符
+
+#### 忽略文件：`.prettierignore`
+```
+dist/
+dist-demo/
+node_modules/
+*.min.js
+*.bundle.js
+*.d.ts
+```
+
+### 使用方法
+
+```bash
+# 检查代码质量
+pnpm lint
+
+# 自动修复 ESLint 问题
+pnpm lint:fix
+
+# 格式化代码
+pnpm format
+
+# 使用 Turbo 并行执行
+pnpm turbo:lint
+```
+
+### 集成优势
+
+1. **代码一致性**：确保所有开发者使用相同的代码风格
+2. **质量保证**：自动检查代码中的潜在问题
+3. **团队协作**：减少代码审查中的格式讨论
+4. **自动化**：可以在 CI/CD 中自动运行
+5. **编辑器集成**：支持 VS Code 等编辑器的实时提示
+
 ## 📚 相关资源
 
 - [pnpm Workspace](https://pnpm.io/workspaces)
